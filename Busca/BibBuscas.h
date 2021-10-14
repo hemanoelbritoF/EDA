@@ -19,6 +19,8 @@ void GeraOrdenadoInt(int *pvetor, int pTAM);
 int BuscaAleatoriaInt(int *pvetor, int pTAM, int pvalor);
 int BuscaBinariaInt(int *pvetor, int pTAM, int pvalor);
 
-
+//Ordenação
+void insertSort(int *pvet , int pTAM);
+void bubbleSort(int *vet, int vTAM);
 
 #endif /* BibBuscas_h */

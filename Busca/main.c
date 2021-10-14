@@ -23,6 +23,8 @@ int main(int argc, const char * argv[]) {
         printf("\nB - Busca Sequencial");
         printf("\nC - Gerar Valores Ordenados");
         printf("\nD - Busca Binária");
+        printf("\nE - Ordenação - InsertSort");
+        printf("\nF - Ordenação - BubbleSort");
 
         printf("\nS - Sair");
         printf("\nOpção: ");
@@ -88,6 +90,31 @@ int main(int argc, const char * argv[]) {
                 }
                 else
                     printf("\nValores ordenados não foram gerados!!!\n");
+                break;
+            case 'E':
+                
+                if(pTamAleatorio > 0){
+                    insertSort(Aleatorio, pTamAleatorio);
+                    for (int i=0; i<pTamAleatorio; i++){
+                        printf("valor %d: %d\n",i,Aleatorio[i]);
+                    }
+                }
+                else
+                    printf("\nValores ordenados não foram gerados!!!\n");
+                
+                break;
+
+            case 'F':
+                
+                if(pTamAleatorio > 0){
+                    bubbleSort(Aleatorio, pTamAleatorio);
+                    for (int i=0; i<pTamAleatorio; i++){
+                        printf("valor %d: %d\n",i,Aleatorio[i]);
+                    }
+                }
+                else
+                    printf("\nValores ordenados não foram gerados!!!\n");
+                
                 break;
 
                 

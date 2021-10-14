@@ -33,7 +33,6 @@ void GeraOrdenadoInt(int *pvetor, int pTAM){
 }
 
 //Buscas:
-
 int BuscaAleatoriaInt(int *pvetor, int pTAM, int pvalor){
     int aux=0;
     for(int i=0; i<pTAM; i++){
@@ -46,7 +45,6 @@ int BuscaAleatoriaInt(int *pvetor, int pTAM, int pvalor){
         return -1;
     }
 }
-
 
 int BuscaBinariaInt(int *pvetor, int pTAM, int pvalor){
     int esquerda = -1;
@@ -67,5 +65,45 @@ int BuscaBinariaInt(int *pvetor, int pTAM, int pvalor){
         interacao++;
     }
     printf("---------%d \n",interacao);
+}
 
+//Ordenação 
+void insertSort(int *pvet , int pTAM){
+    int i=0;
+    int j=1;
+    int aux=0;
+    int x=0;
+
+    while(j<pTAM){
+        aux = pvet[j];
+        i=j-1;
+        while((i>=0) && (pvet[i]>aux)){
+            pvet[i+1] = pvet[i];
+            i = i-1;
+            x++;
+        }
+        pvet[i+1] = aux;
+        j = j+1;
+    }
+    printf("N Iterações: %d\n",x);
+}
+
+//BubbleSort
+void bubbleSort(int *vet, int vTAM){
+    int i, aux, troca =1;
+    int x=0;
+
+    while(troca){
+        troca=0;
+        for (i=0; i<vTAM; i++){
+            if(vet[i]>vet[i+1]){
+                aux = vet[i];
+                vet[i] = vet[i+1];
+                vet[i+1] = aux;
+                troca = 1;
+                x++;
+            }
+        }
+    }
+    printf("N Iterações: %d\n",x);
 }
