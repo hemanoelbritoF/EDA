@@ -8,17 +8,30 @@ struct No{
     int FatBal;
 };
 //renomeando estrutura de dados
-typedef struct No celula;
+typedef struct No Arv;
 
+int altura(Arv *r){
+    if(r==NULL){
+        return 0;
+    }else{
+        int ramoEsquerda = altura(r->pEsq);
+        int ramoDireita = altura(r->pDir);
+        
+        if(ramoEsquerda < ramoDireita){
+            return ramoDireita +1;
+        }else{
+            return ramoEsquerda +1;
+        }
+    }
+}
 
-int aux=0;
-celula *gerar(celula *raiz, int valor){
+Arv *gerar(Arv *raiz, int valor){
 
     if(raiz == NULL){
-        celula *novo;
-        novo = (celula *)malloc(sizeof(celula));
+        Arv *novo;
+        novo = (Arv *)malloc(sizeof(Arv));
         novo->Chave = valor;
-        novo->FatBal = 0;
+        //novo->FatBal = 0;
         novo->pDir=NULL;
         novo->pEsq=NULL;
 
@@ -30,24 +43,21 @@ celula *gerar(celula *raiz, int valor){
         if(valor < raiz->Chave){
             printf("Esquerda\n");
             raiz->pEsq = gerar(raiz->pEsq, valor);
+            raiz->FatBal = altura(raiz)-1;
             return raiz;
         }else{
             printf("Direita\n");
             raiz->pDir = gerar(raiz->pDir, valor);
+            raiz->FatBal = altura(raiz)-1;
+            printf("%d\n",raiz->FatBal);
             return raiz;
         }
     }
 }
 
-int altura(celula *no){
-    if(no==NULL){
-        return -1;
-    }else{
-         return no->FatBal;
-    }
-}
 
-int fatorBalanceamento(celula *no){
+
+int fatorBalanceamento(Arv *no){
     return labs(altura(no->pEsq) - altura(no->pDir));
 }
 
@@ -59,7 +69,7 @@ int maior(int x, int y){
     }
 }
 
-void RotacaoLL(celula *raiz){
+void RotacaoLL(Arv *raiz){
     struct No *no;
     no = raiz->pEsq;
     raiz->pEsq = no->pDir;
@@ -68,7 +78,7 @@ void RotacaoLL(celula *raiz){
     raiz = no;
 }
 
-void RotacaoRR(celula *raiz){
+void RotacaoRR(Arv *raiz){
     struct No *no;
     no = raiz->pDir;
     raiz->pDir = no->pEsq;
@@ -76,11 +86,11 @@ void RotacaoRR(celula *raiz){
     no->FatBal = maior(altura(no->pDir),raiz->FatBal)+1;
     raiz = no;
 }
-void RotacaoLR(celula *raiz){
+void RotacaoLR(Arv *raiz){
     RotacaoRR(raiz->pEsq);
     RotacaoLL(raiz);
 }
-void RotacaoRL(celula *raiz){
+void RotacaoRL(Arv *raiz){
     RotacaoLL(raiz->pDir);
     RotacaoLL(raiz);
 }
@@ -91,7 +101,7 @@ int main(){
     FILE *AR =NULL;
     AR = fopen("testeA.txt", "rt");
     int num=0;
-    celula *raiz=NULL;
+    Arv *raiz=NULL;
 
     while(!feof(AR)){
         
@@ -99,7 +109,6 @@ int main(){
         num = atoi(linha);
         printf("\n%d %s\n",num, linha);
         raiz = gerar(raiz,num);
-
     }
 
     printf("%d\n", raiz->Chave);
