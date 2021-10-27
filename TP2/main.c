@@ -11,24 +11,17 @@ struct No{
 typedef struct No celula;
 
 
-celula *CriarRaiz(){
-    celula *novo;
-    novo = (celula *)malloc(sizeof(celula));
-
-    if(novo != NULL){
-        novo = NULL;
-    }
-    return novo;
-}
-
+int aux=0;
 celula *gerar(celula *raiz, int valor){
-    celula *novo;
-    novo = (celula *)malloc(sizeof(celula));
-    novo->Chave = valor;
-    novo->pDir=NULL;
-    novo->pEsq=NULL;
 
     if(raiz == NULL){
+        celula *novo;
+        novo = (celula *)malloc(sizeof(celula));
+        novo->Chave = valor;
+        novo->FatBal = 0;
+        novo->pDir=NULL;
+        novo->pEsq=NULL;
+
         raiz = novo;    
         printf("recebeu\n");
         return raiz;
@@ -44,59 +37,82 @@ celula *gerar(celula *raiz, int valor){
             return raiz;
         }
     }
+}
 
+int altura(celula *no){
+    if(no==NULL){
+        return -1;
+    }else{
+         return no->FatBal;
+    }
+}
+
+int fatorBalanceamento(celula *no){
+    return labs(altura(no->pEsq) - altura(no->pDir));
+}
+
+int maior(int x, int y){
+    if(x>y){
+        return x;
+    }else{
+        return y;
+    }
+}
+
+void RotacaoLL(celula *raiz){
+    struct No *no;
+    no = raiz->pEsq;
+    raiz->pEsq = no->pDir;
+    raiz->FatBal = maior(altura(raiz->pEsq), altura(raiz->pDir))+1;
+    no->FatBal = maior(altura(no->pEsq),raiz->FatBal)+1;
+    raiz = no;
+}
+
+void RotacaoRR(celula *raiz){
+    struct No *no;
+    no = raiz->pDir;
+    raiz->pDir = no->pEsq;
+    raiz->FatBal = maior(altura(raiz->pEsq), altura(raiz->pDir))+1;
+    no->FatBal = maior(altura(no->pDir),raiz->FatBal)+1;
+    raiz = no;
+}
+void RotacaoLR(celula *raiz){
+    RotacaoRR(raiz->pEsq);
+    RotacaoLL(raiz);
+}
+void RotacaoRL(celula *raiz){
+    RotacaoLL(raiz->pDir);
+    RotacaoLL(raiz);
 }
 
 int main(){
-
+    
     char linha[10];
     FILE *AR =NULL;
     AR = fopen("testeA.txt", "rt");
     int num=0;
-    celula *raiz;
-    
-    
-    fgets(linha, 10, AR);
-    num = atoi(linha);
-    raiz = gerar(raiz,num);
-    
-    fgets(linha, 10, AR);
-    raiz = gerar(raiz,num);
-    fgets(linha, 10, AR);
-    raiz = gerar(raiz,num);
-    int a =0 ;
-    for (int i=0; i<=10; i++){
-      a = i;
-    }
-    printf("%d",a);
-    /*
-    int i=0;
-    while(i<5){
-        fgets(linha, 10, AR);
-        
-        num = atoi(linha);
-        //printf("%d",num);
-        
-        raiz = gerar(raiz,num);
-        i++;
-    }
-    /*
+    celula *raiz=NULL;
 
-    /*
-    celula *raiz;
-    raiz = gerar(raiz,40);
-    raiz = gerar(raiz,54);
-    raiz = gerar(raiz,34);
-    raiz = gerar(raiz,41);
-    
+    while(!feof(AR)){
+        
+        fgets(linha, 10, AR);
+        num = atoi(linha);
+        printf("\n%d %s\n",num, linha);
+        raiz = gerar(raiz,num);
+
+    }
+
     printf("%d\n", raiz->Chave);
     
-    printf("%p\n", *&raiz->pDir);
-    printf("%p\n", *&raiz->pEsq);
-    printf("%p\n", *&raiz);
     printf("%d\n", raiz->pDir->Chave);
+    printf("%d\n", raiz->pDir->pDir->Chave);
+    printf("%d\n", raiz->pDir->pDir->pEsq->Chave);
     printf("%d\n", raiz->pEsq->Chave);
-
-    */
+    //printf("%d\n", raiz->pEsq->pEsq->Chave);
+    //printf("%p\n", *&raiz);
+    //printf("%d\n", *&raiz->pDir->Chave);
+    //printf("%d\n", *&raiz->pEsq->Chave);
+    
+    
     return 0;
 }
