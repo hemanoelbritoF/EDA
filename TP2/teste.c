@@ -41,12 +41,13 @@ Arv *gerar(Arv *raiz, int valor){
         if(valor < raiz->Chave){
             printf("Esquerda\n");
             raiz->pEsq = gerar(raiz->pEsq, valor);
-            raiz->FatBal = altura(raiz);
+            raiz->FatBal = altura(raiz)-1;
             return raiz;
         }else{
             printf("Direita\n");
             raiz->pDir = gerar(raiz->pDir, valor);
-            raiz->FatBal = altura(raiz);
+            raiz->FatBal = altura(raiz)-1;
+            printf("%d\n",raiz->FatBal);
             return raiz;
         }
     }
@@ -72,6 +73,7 @@ int  main(){
     raiz = gerar(raiz,50);
     raiz = gerar(raiz,55);
 
+    printf("\n");
     printf("%d\n", raiz->FatBal);//40
     printf("%d\n", raiz->pDir->FatBal);//45
     printf("%d\n", raiz->pDir->pDir->FatBal);//50
