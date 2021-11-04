@@ -25,6 +25,80 @@ int altura(Arv *r){
     }
 }
 
+
+/*
+void rot_esq(Arv *r){
+    Arv *a=*r;
+    NO *b=a->pDir;
+    a->pDir=b->pEsq;
+    b->pEsq=a;
+    a->FatBal=0;
+    b->FatBal=0;
+    *r=b;
+}
+*/
+void roda_dir(Arv ** p)
+{
+    if((*p)->pEsq==NULL) return;
+    Arv * q = (*p) -> pEsq;
+
+    (*p) -> pEsq = q -> pDir;
+    q -> pDir = (*p);
+
+    (*p)->FatBal=altura(*p);
+    q->FatBal=altura(q);
+
+    *p=q;
+}
+
+void roda_esq(Arv ** p)
+{
+    if((*p)->pDir==NULL) return;
+
+    Arv * q = (*p) -> pDir;
+
+    (*p) -> pDir = q -> pEsq;
+    q -> pEsq = (*p);
+
+    (*p)->FatBal=altura(*p);
+    q->FatBal=altura(q);
+
+    *p=q;
+}
+
+int getaltura(Arv* p)
+{
+    return p!=NULL ? p -> FatBal : 0;
+}
+
+void balanco(Arv ** p)
+{
+    Arv * aux;
+    int fb=getaltura((*p) -> pEsq ) - getaltura((*p) -> pDir);
+
+    if  (fb>= 2 )
+    {
+        aux=(*p) -> pEsq;
+        fb=getaltura(aux -> pEsq)-getaltura(aux -> pDir);
+        if (fb<0)
+            roda_esq(&((*p) -> pEsq));
+
+        roda_dir(p);
+
+    }
+    else if (fb <= -2 )
+    {
+        aux=(*p) -> pDir;
+        fb=getaltura(aux -> pEsq)-getaltura(aux -> pDir);
+        if (fb>0)
+            roda_dir(&((*p) -> pDir));
+
+        roda_esq(p);
+    }
+
+
+}
+
 Arv *gerar(Arv *raiz, int valor){
 
     if(raiz == NULL){
@@ -43,56 +117,20 @@ Arv *gerar(Arv *raiz, int valor){
         if(valor < raiz->Chave){
             printf("Esquerda\n");
             raiz->pEsq = gerar(raiz->pEsq, valor);
-            raiz->FatBal = altura(raiz)-1;
+            raiz->FatBal = altura(raiz);
+            balanco(&raiz);
+            raiz->FatBal = altura(raiz);
             return raiz;
         }else{
             printf("Direita\n");
             raiz->pDir = gerar(raiz->pDir, valor);
-            raiz->FatBal = altura(raiz)-1;
-            printf("%d\n",raiz->FatBal);
+            raiz->FatBal = altura(raiz);
+            //printf("%d\n",raiz->FatBal);
+            balanco(&raiz);
+            raiz->FatBal = altura(raiz);
             return raiz;
         }
     }
-}
-
-
-
-int fatorBalanceamento(Arv *no){
-    return labs(altura(no->pEsq) - altura(no->pDir));
-}
-
-int maior(int x, int y){
-    if(x>y){
-        return x;
-    }else{
-        return y;
-    }
-}
-
-void RotacaoLL(Arv *raiz){
-    struct No *no;
-    no = raiz->pEsq;
-    raiz->pEsq = no->pDir;
-    raiz->FatBal = maior(altura(raiz->pEsq), altura(raiz->pDir))+1;
-    no->FatBal = maior(altura(no->pEsq),raiz->FatBal)+1;
-    raiz = no;
-}
-
-void RotacaoRR(Arv *raiz){
-    struct No *no;
-    no = raiz->pDir;
-    raiz->pDir = no->pEsq;
-    raiz->FatBal = maior(altura(raiz->pEsq), altura(raiz->pDir))+1;
-    no->FatBal = maior(altura(no->pDir),raiz->FatBal)+1;
-    raiz = no;
-}
-void RotacaoLR(Arv *raiz){
-    RotacaoRR(raiz->pEsq);
-    RotacaoLL(raiz);
-}
-void RotacaoRL(Arv *raiz){
-    RotacaoLL(raiz->pDir);
-    RotacaoLL(raiz);
 }
 
 int main(){
@@ -111,17 +149,17 @@ int main(){
         raiz = gerar(raiz,num);
     }
 
-    printf("%d\n", raiz->Chave);
+    //printf("%d\n", raiz->Chave);
     
-    printf("%d\n", raiz->pDir->Chave);
-    printf("%d\n", raiz->pDir->pDir->Chave);
-    printf("%d\n", raiz->pDir->pDir->pEsq->Chave);
-    printf("%d\n", raiz->pEsq->Chave);
+    //printf("%d\n", raiz->pDir->Chave);
+    //printf("%d\n", raiz->pDir->pDir->Chave);
+    //printf("%d\n", raiz->pDir->pDir->pEsq->Chave);
+    //printf("%d\n", raiz->pEsq->Chave);
     //printf("%d\n", raiz->pEsq->pEsq->Chave);
     //printf("%p\n", *&raiz);
     //printf("%d\n", *&raiz->pDir->Chave);
     //printf("%d\n", *&raiz->pEsq->Chave);
-    
+    printf("%d", raiz->Chave);
     
     return 0;
 }
